@@ -23,7 +23,11 @@ namespace radio.Pages
         public CartPage()
         {
             InitializeComponent();
-            DataContext = new CartViewModel(); // Инициализация ViewModel
+
+            if (Application.Current.MainWindow?.DataContext is MainWindowViewModel mainVM)
+            {
+                DataContext = mainVM.CartViewModel;
+            }
         }
     }
 }

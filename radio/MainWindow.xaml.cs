@@ -23,6 +23,7 @@ namespace radio
             InitializeComponent();
             var connectionString = App.Configuration.GetConnectionString("RadioDB");
             NavButton_Click(btnCatalog, null);
+            DataContext = new MainWindowViewModel();
         }
 
         private void NavButton_Click(object sender, RoutedEventArgs e)
@@ -42,6 +43,12 @@ namespace radio
                 button.Style = (Style)FindResource("SelectedNavButtonStyle");
                 NavigateToPage(button.Name);
             }
+        }
+
+
+        public class MainWindowViewModel
+        {
+            public CartViewModel CartViewModel { get; } = new CartViewModel();
         }
 
         private void CartButton_Click(object sender, RoutedEventArgs e)

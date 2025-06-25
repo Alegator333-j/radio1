@@ -22,23 +22,20 @@
 
 
     <Grid>
-        <ItemsControl ItemsSource="{Binding Products}">
-            <ItemsControl.ItemTemplate>
+        <ListView x:Name="ProductsListView">
+            <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border Margin="10" Padding="10" Background="#FFF5F5F5">
-                        <StackPanel>
-                            <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding Price, StringFormat={}{0:C}}"/>
-                            <Button Content="Добавить в корзину" 
-                                    Command="{Binding DataContext.AddToCartCommand, 
-                                            RelativeSource={RelativeSource AncestorType=Page}}"
-                                    CommandParameter="{Binding}"
-                                    Margin="0,5,0,0"/>
-                        </StackPanel>
-                    </Border>
+                    <StackPanel Margin="10">
+                        <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Price, StringFormat={}{0:C}}"/>
+                        <Button Content="Добавить в корзину" 
+                        Click="AddToCart_Click"
+                        DataContext="{Binding}"
+                        Margin="0,5,0,0"/>
+                    </StackPanel>
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
     
 </Page>

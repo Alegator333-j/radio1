@@ -20,6 +20,7 @@ namespace radio
             _dbContext = new DatabaseContext(connectionString);
         }
 
+
         public DataTable GetProductsByCategory(int categoryId)
         {
             string query = @"
@@ -45,9 +46,23 @@ namespace radio
             }
             catch (Exception ex)
             {
-                // Логирование ошибки
-                Console.WriteLine($"Ошибка при получении товаров: {ex.Message}");
-                throw; // Можно заменить на возврат пустой таблицы при необходимости
+                MessageBox.Show($"Ошибка при получении товаров: {ex.Message}");
+                return new DataTable(); // Возвращаем пустую таблицу при ошибке
+            }
+        }
+
+        private IEnumerable<Product> ConvertDataTableToProducts(DataTable dataTable)
+        {
+            foreach (DataRow row in dataTable.Rows)
+            {
+                yield return new Product
+                {
+                    Id = Convert.ToInt32(row["Id"]),
+                    Name = row["Name"].ToString(),
+                    Price = Convert.ToDecimal(row["Price"]),
+                    Description = row["Description"].ToString(),
+                    Manufacturer = row["Manufacturer"].ToString()
+                };
             }
         }
     }

@@ -115,7 +115,7 @@ namespace radio.Pages
             var portableRadios = viewModel.GetProductsByCategory(2); // ID категории портативных радиостанций
             LoadData(portableRadios);
         }
-
+        
         private void FilterChanged(object sender, RoutedEventArgs e)
         {
             ApplyFilters();

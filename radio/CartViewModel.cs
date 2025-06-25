@@ -28,11 +28,11 @@ namespace radio
                     ProductId = product.Id,
                     Name = product.Name,
                     Price = product.Price,
-                    Quantity = 1
+                    Quantity = 1,
+                    Description = product.Description,
+                    Manufacturer = product.Manufacturer
                 });
             }
-
-            MessageBox.Show($"{product.Name} добавлен в корзину!");
         }
 
         public ObservableCollection<CartItem> CartItems { get; set; }
@@ -52,17 +52,10 @@ namespace radio
             OrderDate = DateTime.Today;
 
             // Команда для оформления заказа
-            PlaceOrderCommand = new RelayCommand(PlaceOrder);
-
-            // Загрузка тестовых данных (в реальном приложении загружайте из корзины)
-            LoadTestData();
+            PlaceOrderCommand = new RelayCommand<object>(_ => PlaceOrder());
         }
 
-        private void LoadTestData()
-        {
-            CartItems.Add(new CartItem { Name = "Радиостанция", Quantity = 1, Price = 12000 });
-            CartItems.Add(new CartItem { Name = "Антенна", Quantity = 2, Price = 3500 });
-        }
+
 
         private void PlaceOrder()
         {
@@ -84,5 +77,7 @@ namespace radio
         public string Name { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
+        public string Description { get; set; }
+        public string Manufacturer { get; set; }
     }
 }
