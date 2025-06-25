@@ -1,0 +1,164 @@
+﻿<Window x:Class="radio.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:radio"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="900">
+
+
+    <!-- Добавляем стиль для закругленной кнопки -->
+    <Window.Resources>
+        <Style x:Key="RoundCartButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="20" 
+                                Width="40" Height="40">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#EEEEEE"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#DDDDDD"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+    </Window.Resources>
+
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Верхняя панель -->
+        <Border Grid.Row="0" Background="#f5f5f5" Padding="10">
+            <Grid Cursor="">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- Логотип -->
+                    <ColumnDefinition Width="*"/>
+                    <!-- Пустое пространство -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- Телефон, поиск, корзина -->
+                </Grid.ColumnDefinitions>
+
+                <!-- Логотип с эффектом наведения без синего фона -->
+                <Button Grid.Column="0" 
+        Click="NavButton_Click"
+        Padding="0" 
+        Background="Transparent" 
+        BorderThickness="0"
+        Cursor="Hand">
+                    <!-- Кастомный стиль для кнопки -->
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="border" 
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                BorderThickness="0">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="Opacity" Value="0.8"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="False">
+                                                <Setter TargetName="border" Property="Opacity" Value="1"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+
+                    <Image Source="/Images/Logo.png" 
+           Width="150" Height="40" 
+           Stretch="Uniform"/>
+                </Button>
+
+                <!-- Телефон, поиск и корзина -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Text="+7 (964) 331-24-71" FontSize="16" Margin="0,0,20,0"
+                               VerticalAlignment="Center"/>
+                    <TextBox Width="200" Margin="0,0,20,0" Padding="5" Text="ПОИСК ТОВАРОВ"
+                             VerticalAlignment="Center"/>
+                    <!-- Кнопка корзины с эффектом наведения -->
+                    <Button x:Name="CartButton" 
+        ToolTip="Корзина" 
+        Click="CartButton_Click"
+        VerticalAlignment="Center"
+        Background="Transparent"
+        BorderThickness="0"
+        Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="border" 
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                BorderThickness="0"
+                                CornerRadius="20"
+                                Width="40" Height="40">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="border" Property="Opacity" Value="0.8"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="False">
+                                                    <Setter TargetName="border" Property="Opacity" Value="1"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                        <Image Source="/Images/Cart.png" Stretch="Uniform" Width="24" Height="24"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Навигационное меню (без кнопки ГЛАВНАЯ) -->
+        <Border Grid.Row="1" Background="#333" Padding="10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="btnCatalog" Content="КАТАЛОГ" Style="{StaticResource NavButtonStyle}" Click="NavButton_Click"/>
+                <Button x:Name="btnOrder" Content="КАК ЗАКАЗАТЬ" Style="{StaticResource NavButtonStyle}" Click="NavButton_Click"/>
+                <Button x:Name="btnDelivery" Content="ДОСТАВКА" Style="{StaticResource NavButtonStyle}" Click="NavButton_Click"/>
+                <Button x:Name="btnContacts" Content="КОНТАКТЫ" Style="{StaticResource NavButtonStyle}" Click="NavButton_Click"/>
+            </StackPanel>
+        </Border>
+
+        <Frame x:Name="MainContentFrame" Grid.Row="2" NavigationUIVisibility="Hidden"/>
+
+        <Border Grid.Row="3" Background="#f5f5f5" Padding="10">
+            <TextBlock Text="© 2023 Mihailo. Все права защищены." HorizontalAlignment="Center"/>
+        </Border>
+    </Grid>
+</Window>
