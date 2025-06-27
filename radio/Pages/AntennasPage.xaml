@@ -29,9 +29,8 @@
                         <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
                         <TextBlock Text="{Binding Price, StringFormat={}{0:C}}"/>
                         <Button Content="Добавить в корзину" 
-                        Click="AddToCart_Click"
-                        DataContext="{Binding}"
-                        Margin="0,5,0,0"/>
+                                Click="AddToCart_Click"
+                                DataContext="{Binding}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

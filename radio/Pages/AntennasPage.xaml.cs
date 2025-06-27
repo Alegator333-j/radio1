@@ -24,16 +24,35 @@ namespace radio.Pages
     /// </summary>
     public partial class AntennasPage : Page
     {
-        private CartViewModel _cartVM; // Ссылка на корзину
+        private readonly CartViewModel _cartViewModel;
 
         public AntennasPage()
         {
             InitializeComponent();
+            _cartViewModel = GetCartViewModel();
+            ProductsListView.ItemsSource = LoadAntennasFromDatabase();
+        }
 
-            if (Application.Current.MainWindow?.DataContext is MainWindowViewModel mainVM)
-            {
-                _cartVM = mainVM.CartViewModel;
-            }
+        private CartViewModel GetCartViewModel()
+        {
+            // Способ 1: Через MainWindowViewModel.Instance
+            return MainWindowViewModel.Instance?.CartViewModel;
+
+            // ИЛИ Способ 2: Через DataContext MainWindow
+            // if (Application.Current.MainWindow?.DataContext is MainWindowViewModel mainVM)
+            // {
+            //     return mainVM.CartViewModel;
+            // }
+            // return null;
+        }
+
+        private ObservableCollection<Product> LoadAntennasFromDatabase()
+        {
+            var antennas = new ObservableCollection<Product>();
+            // Пример загрузки данных (замените на ваш источник)
+            antennas.Add(new Product { Id = 1, Name = "Антенна Diamond X50A", Price = 7999.99m });
+            antennas.Add(new Product { Id = 2, Name = "Антенна Opek HVT-400B", Price = 11999.99m });
+            return antennas;
         }
 
         public void LoadData(DataTable data)
@@ -44,7 +63,6 @@ namespace radio.Pages
                 return;
             }
 
-            // Создаем коллекцию продуктов из DataTable
             var products = new ObservableCollection<Product>();
             foreach (DataRow row in data.Rows)
             {
@@ -60,16 +78,27 @@ namespace radio.Pages
             ProductsListView.ItemsSource = products;
         }
 
-        // Обработчик кнопки "Добавить в корзину"
         private void AddToCart_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.DataContext is Product product)
             {
-                var mainWindow = Application.Current.MainWindow;
-                if (mainWindow?.DataContext is MainWindowViewModel mainVM)
+                try
                 {
-                    mainVM.CartViewModel.AddToCart(product);
-                    MessageBox.Show($"{product.Name} добавлен в корзину!");
+                    if (_cartViewModel != null)
+                    {
+                        _cartViewModel.AddToCart(product);
+                        MessageBox.Show($"{product.Name} добавлен в корзину!", "Успех",
+                                      MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        throw new NullReferenceException("Корзина не доступна");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при добавлении в корзину: {ex.Message}", "Ошибка",
+                                   MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

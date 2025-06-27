@@ -21,50 +21,48 @@ namespace radio
         public MainWindow()
         {
             InitializeComponent();
-            var connectionString = App.Configuration.GetConnectionString("RadioDB");
+
+            // Инициализация подключения к БД
+            var connectionString = App.Configuration?.GetConnectionString("RadioDB");
+
+            // Установка начальной страницы
             NavButton_Click(btnCatalog, null);
-            DataContext = new MainWindowViewModel();
+
+            // Установка контекста данных
+            DataContext = MainWindowViewModel.Instance;
         }
 
         private void NavButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
+            if (!(sender is Button button)) return;
+
             ResetNavButtonsStyle();
 
-            // Если кликнули по логотипу
-            if (button.Content == null && button.Parent is StackPanel == false)
+            // Обработка клика по логотипу (если кнопка без контента и не в StackPanel)
+            if (button.Content == null && !(button.Parent is StackPanel))
             {
                 MainContentFrame.Navigate(new CatalogPage());
                 return;
             }
 
-            if (button != null)
-            {
-                button.Style = (Style)FindResource("SelectedNavButtonStyle");
-                NavigateToPage(button.Name);
-            }
-        }
+            // Установка стиля для активной кнопки
+            button.Style = (Style)FindResource("SelectedNavButtonStyle");
 
-
-        public class MainWindowViewModel
-        {
-            public CartViewModel CartViewModel { get; } = new CartViewModel();
-        }
-
-        private void CartButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Обработка клика по кнопке корзины
-            MainContentFrame.Navigate(new CartPage());
+            // Навигация на соответствующую страницу
+            NavigateToPage(button.Name);
         }
 
         private void ResetNavButtonsStyle()
         {
-            btnCatalog.Style = (Style)FindResource("NavButtonStyle");
-            btnOrder.Style = (Style)FindResource("NavButtonStyle");
-            btnDelivery.Style = (Style)FindResource("NavButtonStyle");
-            btnContacts.Style = (Style)FindResource("NavButtonStyle");
+            if (btnCatalog != null)
+                btnCatalog.Style = (Style)FindResource("NavButtonStyle");
+            if (btnOrder != null)
+                btnOrder.Style = (Style)FindResource("NavButtonStyle");
+            if (btnDelivery != null)
+                btnDelivery.Style = (Style)FindResource("NavButtonStyle");
+            if (btnContacts != null)
+                btnContacts.Style = (Style)FindResource("NavButtonStyle");
         }
-
 
         private void NavigateToPage(string buttonName)
         {
@@ -85,6 +83,21 @@ namespace radio
                 default:
                     MainContentFrame.Navigate(new CatalogPage());
                     break;
+            }
+        }
+
+        private void CartButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Навигация на страницу корзины
+            MainContentFrame.Navigate(new CartPage());
+
+            // Сброс стилей навигационных кнопок
+            ResetNavButtonsStyle();
+
+            // Установка стиля для кнопки корзины, если нужно
+            if (sender is Button cartButton)
+            {
+                cartButton.Style = (Style)FindResource("SelectedNavButtonStyle");
             }
         }
     }

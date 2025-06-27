@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,8 @@ namespace radio.Pages
         public CartPage()
         {
             InitializeComponent();
+
+            Debug.WriteLine($"Инициализация CartPage. DataContext is CartViewModel: {DataContext is CartViewModel}");
 
             if (Application.Current.MainWindow?.DataContext is MainWindowViewModel mainVM)
             {

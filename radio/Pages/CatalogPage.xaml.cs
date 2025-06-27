@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 
 namespace radio.Pages
 {
@@ -54,6 +55,24 @@ namespace radio.Pages
             var page = new MeasurePage();
             page.LoadData(_viewModel.GetProductsByCategory(4)); // ID измерительных приборов
             NavigationService?.Navigate(page);
+        }
+
+        private void CartButton_Click(object sender, RoutedEventArgs e)
+        {
+            var cartPage = new CartPage();
+
+            // Получаем CartViewModel из MainWindow
+            if (Application.Current.MainWindow?.DataContext is MainWindowViewModel mainVM)
+            {
+                cartPage.DataContext = mainVM.CartViewModel;
+            }
+            else
+            {
+                // Отладочное сообщение
+                Debug.WriteLine("Не удалось получить MainWindowViewModel");
+            }
+
+            NavigationService?.Navigate(cartPage);
         }
     }
 }
